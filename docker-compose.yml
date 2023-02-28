@@ -1,19 +1,28 @@
-version: "2"
+version: '3'
 services:
-  app:
-    build: ./app
-    container_name: "MLB_App1"
-    depends_on:
-      - db
-    ports:
-      - "5000:5000"
+    webapp:
+        restart: always
+        build:
+           context: ./app
+           dockerfile: Dockerfile.dev
+        container_name: webapp_container
+        ports:
+          - "4000:5000"
+        depends_on: 
+            - webapp_db
+        volumes:
+          - ./app:/app
 
-  db:
-    image: mysql:5.7
-    container_name: "MySQL_DB1"
-    ports:
-      - "32000:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d/:ro
+
+    webapp_db:
+         restart: always
+         image: mysql:5.7
+         environment:
+              MYSQL_ROOT_PASSWORD: root
+         container_name: webapp_db_container
+         volumes:
+           - ./db:/docker-entrypoint-initdb.d/
+         ports:
+          - "3306:3306"
+
+
