@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html
+
+hooks:
+  install:
+  AfterInstall:
+       - location: scripts/start_docker.sh
+         timeout: 300
+         runas: root
+  ApplicationStart:
+       - location: scripts/start_application.sh
+         timeout: 600
+         runas: root
